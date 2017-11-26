@@ -12,6 +12,11 @@
    Used bcmod() to handle large numbers.
 */
 
+/**
+    On a small scale both functions A and B work but
+    60085175143 is still too large. Can this be solved with php?
+**/
+
 function primeFactorA(string $integer)
 {
 	$max = 0;
@@ -21,7 +26,7 @@ function primeFactorA(string $integer)
 		if (bcmod($integer, $x) == 0) {
 		    
 		    if (checkIfPrime($x)) {
-			//echo "$x, ";
+			
 			$max = $x;
 		    }
 		}
@@ -43,20 +48,47 @@ function checkIfPrime($integer)
 	}
 	return true;
 }
+
+/*
 echo "<br> The max prime factor of 13195 is: " . primeFactorA(13195);
-echo "<br> The max is " . primeFactorA(60085175143);
+echo "<br> The max prime factor of 60085175143 is: " . primeFactorA(60085175143);
+*/
+
+
+/* 
+    Tried to reverse the loop and lower the amount of loops to process
+
+*/
+
+function checkIfPrimeB($integer)
+{
+    if ($integer < 2) {
+    	return false;
+    }
+
+    for ($divisor = 2; $divisor < $integer; $divisor++) {
+        
+        if (($integer % $divisor) == 0) {
+        	return false;
+        }
+    }
+    return true;
+}
 
 function primeFactorB($integer)
 {
 	$max = 0;
 	for ($x = $integer; $x > $max; $x--) {
 
-		if (($integer % $x == 0) && checkIfPrime($x)) {
+		if (($integer % $x == 0) && checkIfPrimeB($x)) {
 			$max = $x;
+			return $max;
 		}
 	}
 	return $max;
 }
 //echo "<br> The max prime factor of 60085175143 is: " . primeFactorB(60085175143);
+
+echo "The max prime factor of 13195 is : " . primeFactorB(13195);
 
 ?>
